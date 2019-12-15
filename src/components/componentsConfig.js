@@ -1,3 +1,7 @@
+/**
+ * pattern 正则表达式
+ */
+
 export const basicComponents = [{
     type: 'input',
     name: "单行文本",
@@ -245,7 +249,8 @@ export const advanceComponents = [{
     name: "自定义区域",
     icon: 'icon-zidingyishuju',
     options: {
-      defaultType: 'String'
+      defaultType: 'String',
+      slotName: ''
     }
   },
   {

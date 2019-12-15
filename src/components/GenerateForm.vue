@@ -41,9 +41,10 @@
           </el-row>
         </template>
 
+        <!-- 自定义区域 -->
         <template v-else-if="item.type == 'blank'">
           <el-form-item :label="item.name" :prop="item.model" :key="item.key">
-            <slot :name="item.model" :model="models"></slot>
+            <slot :name="item.options.slotName" :model="models" :label="item.model"></slot>
           </el-form-item>
         </template>
 

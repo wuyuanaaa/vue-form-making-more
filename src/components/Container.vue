@@ -63,6 +63,7 @@
           </div>
           
         </el-aside>
+        <!-- 功能操作 -->
         <el-container class="center-container" direction="vertical">
           <el-header class="btn-bar" style="height: 45px;">
             <slot name="action">
@@ -78,19 +79,18 @@
             <widget-form v-if="!resetJson"  ref="widgetForm" :data="widgetForm" :select.sync="widgetFormSelect"></widget-form>
           </el-main>
         </el-container>
-        
+        <!-- 属性设置 -->
         <el-aside class="widget-config-container">
           <el-container>
             <el-header height="45px">
-              <div class="config-tab" :class="{active: configTab=='widget'}" @click="handleConfigSelect('widget')">{{$t('fm.config.widget.title')}}</div>
-              <div class="config-tab" :class="{active: configTab=='form'}" @click="handleConfigSelect('form')">{{$t('fm.config.form.title')}}</div>
+              <div class="config-tab" :class="{active: configTab=='widget'}" @click="handleConfigSelect('widget')">字段属性</div>
+              <div class="config-tab" :class="{active: configTab=='form'}" @click="handleConfigSelect('form')">表单属性</div>
             </el-header>
             <el-main class="config-content">
               <widget-config v-show="configTab=='widget'" :data="widgetFormSelect"></widget-config>
               <form-config v-show="configTab=='form'" :data="widgetForm.config"></form-config>
             </el-main>
           </el-container>
-          
         </el-aside>
 
         <cus-dialog
@@ -101,16 +101,15 @@
           form
         >
           <generate-form insite="true" @on-change="handleDataChange" v-if="previewVisible" :data="widgetForm" :value="widgetModels" :remote="remoteFuncs" ref="generateForm">
-
-            <template v-slot:blank="scope">
-              Width <el-input v-model="scope.model.blank.width" style="width: 100px"></el-input>
-              Height <el-input v-model="scope.model.blank.height" style="width: 100px"></el-input>
+            <template v-slot:widthAndHeight="{model, label}">
+              Width <el-input v-model="model[label].width" style="width: 100px"></el-input>
+              Height <el-input v-model="model[label].height" style="width: 100px"></el-input>
             </template>
           </generate-form>
 
           <template slot="action">
-            <el-button type="primary" @click="handleTest">{{$t('fm.actions.getData')}}</el-button>
-            <el-button @click="handleReset">{{$t('fm.actions.reset')}}</el-button>
+            <el-button type="primary" @click="handleTest">获取数据</el-button>
+            <el-button @click="handleReset">重置</el-button>
           </template>
         </cus-dialog>
 
@@ -122,7 +121,7 @@
           width="800px"
           form
         >
-          <el-alert type="info" :title="$t('fm.description.uploadJsonInfo')"></el-alert>
+          <el-alert type="info" :title="'JSON格式如下，直接复制生成的json覆盖此处代码点击确定即可'"></el-alert>
           <div id="uploadeditor" style="height: 400px;width: 100%;">{{jsonEg}}</div>
         </cus-dialog>
 
@@ -137,7 +136,7 @@
           <div id="jsoneditor" style="height: 400px;width: 100%;">{{jsonTemplate}}</div>
           
           <template slot="action">
-            <el-button type="primary" class="json-btn" :data-clipboard-text="jsonCopyValue">{{$t('fm.actions.copyData')}}</el-button>
+            <el-button type="primary" class="json-btn" :data-clipboard-text="jsonCopyValue">复制数据</el-button>
           </template>
         </cus-dialog>
 

@@ -30,15 +30,16 @@
                         @add="handleWidgetColAdd($event, element, colIndex)"
                       >
                         <transition-group name="fade" tag="div" class="widget-col-list">
-                          <widget-form-item 
-                            v-for="(el, i) in col.list"
-                            v-if="el.key"
-                            :key="el.key"
-                            :element="el" 
-                            :select.sync="selectWidget" 
-                            :index="i" 
-                            :data="col">
-                          </widget-form-item>
+                          <template v-for="(el, i) in col.list">
+                            <widget-form-item 
+                              v-if="el.key"
+                              :key="el.key"
+                              :element="el" 
+                              :select.sync="selectWidget" 
+                              :index="i" 
+                              :data="col">
+                            </widget-form-item>
+                          </template>
                         </transition-group>
                       </draggable>
                   </el-col>
@@ -53,7 +54,14 @@
                 </el-row>
             </template>
             <template v-else>
-              <widget-form-item v-if="element && element.key"  :key="element.key" :element="element" :select.sync="selectWidget" :index="index" :data="data"></widget-form-item>
+              <widget-form-item
+                v-if="element && element.key"
+                :key="element.key"
+                :element="element"
+                :select.sync="selectWidget"
+                :index="index"
+                :data="data"
+              ></widget-form-item>
             </template>
           </template>
         </transition-group>
@@ -104,11 +112,8 @@ export default {
       this.selectWidget = this.data.list[index]
     },
     handleWidgetAdd (evt) {
-      console.log('add', evt)
-      console.log('end', evt)
       const newIndex = evt.newIndex
       const to = evt.to
-      console.log('to',to)
       
       this.$set(this.data.list, newIndex, this.widgetFormFormat(this.data.list[newIndex]))
 
@@ -144,7 +149,6 @@ export default {
       return newData
     },
     handleWidgetColAdd ($event, row, colIndex) {
-      console.log('coladd', $event, row, colIndex)
       const newIndex = $event.newIndex
       const oldIndex = $event.oldIndex
       const item = $event.item
@@ -159,8 +163,6 @@ export default {
 
         return false
       }
-
-      console.log('from', item)
 
       const key = Date.parse(new Date()) + '_' + Math.ceil(Math.random() * 99999)
 

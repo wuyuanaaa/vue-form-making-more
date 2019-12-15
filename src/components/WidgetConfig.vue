@@ -128,13 +128,6 @@
                 </el-select>
               </div>
             </div>
-            
-            <!-- <el-input size="mini" style="" v-model="data.options.props.value">
-              <template slot="prepend">值</template>
-            </el-input>
-            <el-input size="mini" style="" v-model="data.options.props.label">
-              <template slot="prepend">标签</template>
-            </el-input> -->
           </div>
         </template>
         <template v-else>
@@ -305,13 +298,20 @@
       </template>
 
       <template v-if="data.type=='blank'">
-        <el-form-item label="绑定数据类型">
+        <el-form-item label="自定义区域key">
+          <el-select v-model="data.options.slotName" @change="handleBlankSlotChange">
+            <el-option value="widthAndHeight" label="宽高"></el-option>
+          </el-select>
+        </el-form-item>
+        <!-- 此处数据类型改为自动替换 见 handleBlankSlotChange 方法 -->
+        <!-- <el-form-item label="绑定数据类型">
           <el-select v-model="data.options.defaultType">
             <el-option value="String" label="字符串"></el-option>
             <el-option value="Object" label="对象"></el-option>
             <el-option value="Array" label="数组"></el-option>
           </el-select>
-        </el-form-item>
+        </el-form-item> -->
+
       </template>
 
       <template v-if="data.type == 'grid'">
@@ -396,6 +396,10 @@
 import Draggable from 'vuedraggable'
 import request from '../util/request'
 
+const BLANK_SLOT_DEFAULT_TYPE = {
+  widthAndHeight: 'Object'
+}
+
 export default {
   components: {
     Draggable
@@ -471,10 +475,18 @@ export default {
         } else {
           this.data.options.defaultValue = ''
         }
-        
       }
     },
-
+    /**
+     * 自定义区域
+     */
+    handleBlankSlotChange(val) {
+      console.log(val)
+      this.data.options.defaultType = BLANK_SLOT_DEFAULT_TYPE[val]
+    },
+    /**
+     * 修正校验必填属性
+     */
     validateRequired (val) {
       if (val) {
         this.validator.required = {required: true, message: `${this.data.name}必须填写`}
@@ -486,7 +498,9 @@ export default {
         this.generateRule()
       })
     },
-
+    /**
+     * 修正校验数据类型属性
+     */
     validateDataType (val) {
       if (!this.show) {
         return false
@@ -500,6 +514,9 @@ export default {
 
       this.generateRule()
     },
+    /**
+     * 修正校验正则属性
+     */
     valiatePattern (val) {
       if (!this.show) {
         return false
@@ -546,6 +563,7 @@ export default {
       this.apiKeys = []
     },
     'data.options.isRange': function(val) {
+      console.log('watch data.isRange')
       if (typeof val !== 'undefined') {
         if (val) {
           this.data.options.defaultValue = null
@@ -556,15 +574,19 @@ export default {
       }
     },
     'data.options.required': function(val) {
+      console.log('watch data.options.required', this.data.options.required)
       this.validateRequired(val)
     },
     'data.options.dataType': function (val) {
+      console.log('watch data.options.dataType', this.data.options.dataType)
       this.validateDataType(val)
     },
     'data.options.pattern': function (val) {
+      console.log('watch data.options.pattern', this.data.options.pattern)
       this.valiatePattern(val)
     },
     'data.name': function (val) {
+      console.log('watch data.name', this.data)
       if (this.data.options) {
         this.validateRequired(this.data.options.required)
         this.validateDataType(this.data.options.dataType)
