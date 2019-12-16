@@ -9,7 +9,9 @@
         <a target="_blank" href="https://github.com/GavinZhuLei/vue-form-making">GitHub</a>
       </div>
     </div>
-    <div  class="fm-container"><router-view/></div>
+    <div  class="fm-container">
+      <router-view/>
+    </div>
   </div>
 </template>
 

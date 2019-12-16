@@ -6,57 +6,62 @@
           <div class="components-list">
             <!-- 基础字段 -->
             <template v-if="basicFields.length">
-              <div class="widget-cate">{{$t('fm.components.basic.title')}}</div>
+              <div class="widget-cate">基础字段</div>
               <draggable tag="ul" :list="basicComponents" 
                 v-bind="{group:{ name:'people', pull:'clone',put:false},sort:false, ghostClass: 'ghost'}"
                 @end="handleMoveEnd"
                 @start="handleMoveStart"
                 :move="handleMove"
               >
-                
-                <li v-if="basicFields.indexOf(item.type)>=0" class="form-edit-widget-label" :class="{'no-put': item.type == 'divider'}" v-for="(item, index) in basicComponents" :key="index">
-                  <a>
-                    <i class="icon iconfont" :class="item.icon"></i>
-                    <span>{{item.name}}</span>
-                  </a>
-                </li>
+                <template v-for="(item, index) in basicComponents" >
+                  <li class="form-edit-widget-label" :class="{'no-put': item.type == 'divider'}" v-if="basicFields.indexOf(item.type)>=0" :key="index">
+                    <a>
+                      <i class="icon iconfont" :class="item.icon"></i>
+                      <span>{{item.name}}</span>
+                    </a>
+                  </li>
+                </template>
               </draggable>
             </template>
             <!-- 高级字段 -->
             <template v-if="advanceFields.length">
-              <div class="widget-cate">{{$t('fm.components.advance.title')}}</div>
+              <div class="widget-cate">高级字段</div>
               <draggable tag="ul" :list="advanceComponents" 
                 v-bind="{group:{ name:'people', pull:'clone',put:false},sort:false, ghostClass: 'ghost'}"
                 @end="handleMoveEnd"
                 @start="handleMoveStart"
                 :move="handleMove"
               >
+                <template v-for="(item, index) in advanceComponents" >
+                  <li class="form-edit-widget-label" :class="{'no-put': item.type == 'table'}" v-if="advanceFields.indexOf(item.type) >= 0" :key="index">
+                    <a>
+                      <i class="icon iconfont" :class="item.icon"></i>
+                      <span>{{item.name}}</span>
+                    </a>
+                  </li>
+                </template>
                 
-                <li v-if="advanceFields.indexOf(item.type) >= 0" class="form-edit-widget-label" :class="{'no-put': item.type == 'table'}" v-for="(item, index) in advanceComponents" :key="index">
-                  <a>
-                    <i class="icon iconfont" :class="item.icon"></i>
-                    <span>{{item.name}}</span>
-                  </a>
-                </li>
               </draggable>
             </template>
 
             <!-- 布局字段 -->
             <template v-if="layoutFields.length">
-              <div class="widget-cate">{{$t('fm.components.layout.title')}}</div>
+              <div class="widget-cate">布局字段</div>
               <draggable tag="ul" :list="layoutComponents" 
                 v-bind="{group:{ name:'people', pull:'clone',put:false},sort:false, ghostClass: 'ghost'}"
                 @end="handleMoveEnd"
                 @start="handleMoveStart"
                 :move="handleMove"
               >
+                <template v-for="(item, index) in layoutComponents">
+                  <li v-if="layoutFields.indexOf(item.type) >=0" class="form-edit-widget-label no-put" :key="index">
+                    <a>
+                      <i class="icon iconfont" :class="item.icon"></i>
+                      <span>{{item.name}}</span>
+                    </a>
+                  </li>
+                </template>
                 
-                <li v-if="layoutFields.indexOf(item.type) >=0" class="form-edit-widget-label no-put" v-for="(item, index) in layoutComponents" :key="index">
-                  <a>
-                    <i class="icon iconfont" :class="item.icon"></i>
-                    <span>{{item.name}}</span>
-                  </a>
-                </li>
               </draggable>
             </template>
             
@@ -68,7 +73,8 @@
           <el-header class="btn-bar" style="height: 45px;">
             <slot name="action">
             </slot>
-            <el-button v-if="upload" type="text" size="medium" icon="el-icon-upload2" @click="handleUpload">导入JSON</el-button>
+            <el-button v-if="save" type="text" size="medium" icon="el-icon-upload2" @click="handleSave">保存组件组</el-button>
+            <el-button v-if="upload" type="text" size="medium" icon="el-icon-download" @click="handleUpload">导入JSON</el-button>
             <el-button v-if="clearable" type="text" size="medium" icon="el-icon-delete" @click="handleClear">清空</el-button>
             <el-button v-if="preview" type="text" size="medium" icon="el-icon-view" @click="handlePreview">预览</el-button>
             <el-button v-if="generateJson" type="text" size="medium" icon="el-icon-tickets" @click="handleGenerateJson">生成JSON</el-button>
@@ -150,6 +156,22 @@
         >
           <div id="codeeditor" style="height: 500px; width: 100%;">{{htmlTemplate}}</div>
         </cus-dialog>
+
+        <cus-dialog
+          :visible="saveVisible"
+          @on-close="handleSaveDialogClose"
+          @on-submit="handleSaveDialogSubmit"
+          ref="savePreview"
+          width="400px"
+          form
+        >
+          <el-form :model="saveForm" :rules="saveFormRules" ref="saveForm" label-width="auto">
+            <el-form-item label="组件组名称" prop="name">
+              <el-input v-model="saveForm.name"></el-input>
+            </el-form-item>
+          </el-form>
+          
+        </cus-dialog>
       </el-container>
     </el-main>
   </el-container>
@@ -180,6 +202,10 @@ export default {
     GenerateForm
   },
   props: {
+    save: {
+      type: Boolean,
+      default: true
+    },
     preview: {
       type: Boolean,
       default: false
@@ -210,7 +236,7 @@ export default {
     },
     layoutFields: {
       type: Array,
-      default: () => ['grid']
+      default: () => ['grid','custom']
     }
   },
   data () {
@@ -230,31 +256,12 @@ export default {
       },
       configTab: 'widget',
       widgetFormSelect: null,
+      saveVisible: false,
       previewVisible: false,
       jsonVisible: false,
       codeVisible: false,
       uploadVisible: false,
-      remoteFuncs: {
-        func_test (resolve) {
-          setTimeout(() => {
-            const options = [
-              {id: '1', name: '1111'},
-              {id: '2', name: '2222'},
-              {id: '3', name: '3333'}
-            ]
-
-            resolve(options)
-          }, 2000)
-        },
-        funcGetToken (resolve) {
-          request.get('http://tools-server.xiaoyaoji.cn/api/uptoken').then(res => {
-            resolve(res.uptoken)
-          })
-        },
-        upload_callback (response, file, fileList) {
-          console.log('callback', response, file, fileList)
-        }
-      },
+      remoteFuncs: {},
       widgetModels: {},
       blank: '',
       htmlTemplate: '',
@@ -263,38 +270,45 @@ export default {
       jsonCopyValue: '',
       jsonClipboard: null,
       jsonEg: `{
-  "list": [],
-  "config": {
-    "labelWidth": 100,
-    "labelPosition": "top",
-    "size": "small"
-  }
-}`
+        "list": [],
+        "config": {
+          "labelauto": true,
+          "labelWidth": 100,
+          "labelPosition": "right",
+          "size": "small"
+        }
+      }`,
+      saveForm: {
+        name: ''
+      },
+      saveFormRules: {
+        name: { required: true, message: '请输入组件组名称', trigger: 'blur' }
+      }
     }
   },
   mounted () {
     // this._loadComponents()
   },
   methods: {
-    handleGoGithub () {
-      window.location.href = 'https://github.com/GavinZhuLei/vue-form-making'
-    },
+    // 配置 Tab 选择
     handleConfigSelect (value) {
       this.configTab = value
     },
     handleMoveEnd (evt) {
-      console.log('end', evt)
+      // console.log('end', evt)
     },
     handleMoveStart ({oldIndex}) {
-      console.log('start', oldIndex, this.basicComponents)
+      // console.log('start', oldIndex, this.basicComponents)
     },
     handleMove () {
       return true
     },
+    // 预览
     handlePreview () {
       console.log(this.widgetForm)
       this.previewVisible = true
     },
+    // 预览 获取数据
     handleTest () {
       this.$refs.generateForm.getData().then(data => {
         this.$alert(data, '').catch(e=>{})
@@ -303,9 +317,11 @@ export default {
         this.$refs.widgetPreview.end()
       })
     },
+    // 预览 重置
     handleReset () {
       this.$refs.generateForm.reset()
     },
+    // 生成 JSON
     handleGenerateJson () {
       this.jsonVisible = true
       this.jsonTemplate = this.widgetForm
@@ -324,6 +340,12 @@ export default {
         this.jsonCopyValue = JSON.stringify(this.widgetForm)
       })
     },
+    // 保存组件组
+    handleSave () {
+      this.saveVisible = true
+      
+    },
+    // 生成代码
     handleGenerateCode () {
       this.codeVisible = true
       this.htmlTemplate = generateCode(JSON.stringify(this.widgetForm))
@@ -361,6 +383,24 @@ export default {
 
       this.widgetFormSelect = {}
     },
+    handleSaveDialogClose() {
+      this.saveVisible = false
+      Object.assign(this.$data.saveForm, this.$options.data().saveForm)
+    },
+    handleSaveDialogSubmit() {
+      this.$refs.saveForm.validate((valid) => {
+        if (valid) {
+          const widigetForm = JSON.parse(JSON.stringify(this.widgetForm))
+          this.formatWidigetListValue(widigetForm.list)
+          widigetForm.list = this.formatWidigetList(widigetForm.list)
+          console.log(widigetForm)
+          this.saveVisible = false
+        } else {
+          console.log('error submit!!');
+          return false;
+        }
+      });
+    },
     getJSON () {
       return this.widgetForm
     },
@@ -374,22 +414,46 @@ export default {
         this.widgetFormSelect = json.list[0]
       }
     },
-    handleInput (val) {
-      console.log('input',val)
-      this.blank = val
-    },
     handleDataChange (field, value, data) {
       console.log(field, value, data)
-    }
-  },
-  /* watch: {
-    widgetForm: {
-      deep: true,
-      handler: function (val) {
-        console.log(this.$refs.widgetForm)
+    },
+    // 格式化保存JSON的属性
+    formatWidigetListValue(list) {
+      list.forEach((item) => {
+        delete(item.key)
+        delete(item.model)
+        delete(item.rules)
+        delete(item.options.remoteFunc)
+        if (item.type === 'custom') {
+          this.formatWidigetList(item.list)
+        }
+        if (item.type === 'grid') {
+          item.columns.forEach((colItem) => {
+            this.formatWidigetList(colItem.list)
+          })
+        }
+      })
+    },
+    // 格式化保存JSON的层次 去除内层 custom 外层包裹 custom
+    formatWidigetList(list) {
+      let customIndex = list.findIndex(item => item.type === 'custom')
+      while(customIndex >= 0) {
+        const customList = list[customIndex].list
+        list.splice(customIndex, 1, ...customList)
+        customIndex = list.findIndex(item => item.type === 'custom')
       }
+      list = [
+        {
+          type: 'custom',
+          name: this.saveForm.name,
+          icon: 'icon-grid-',
+          list: [...list],
+          options: {}
+        }
+      ]
+      return list
     }
-  } */
+  }
 }
 </script>
 

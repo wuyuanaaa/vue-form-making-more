@@ -328,85 +328,10 @@ export const layoutComponents = [{
     }
   },
   {
-    type: "grid",
-    icon: "icon-grid-",
-    columns: [{
-      span: 24,
-      list: [{
-        type: "switch",
-        icon: "icon-switch",
-        options: {
-          defaultValue: false,
-          required: false,
-          disabled: false,
-          remoteFunc: "func_1573784782000_90606"
-        },
-        name: "开关",
-        key: "1573784782000_90606",
-        model: "switch_1573784782000_90606",
-        rules: []
-      }, {
-        type: "select",
-        icon: "icon-select",
-        options: {
-          defaultValue: "",
-          multiple: false,
-          disabled: false,
-          clearable: false,
-          placeholder: "",
-          required: false,
-          showLabel: false,
-          width: "",
-          options: [{
-            value: "Option 1"
-          }, {
-            value: "Option 2"
-          }, {
-            value: "Option 3"
-          }],
-          remote: false,
-          filterable: false,
-          remoteOptions: [],
-          props: {
-            value: "value",
-            label: "label"
-          },
-          remoteFunc: "func_1573784783000_36925"
-        },
-        name: "下拉选择框",
-        key: "1573784783000_36925",
-        model: "select_1573784783000_36925",
-        rules: []
-      }, {
-        type: "slider",
-        icon: "icon-slider",
-        options: {
-          defaultValue: 0,
-          disabled: false,
-          required: false,
-          min: 0,
-          max: 100,
-          step: 1,
-          showInput: false,
-          range: false,
-          width: "",
-          remoteFunc: "func_1573784784000_33225"
-        },
-        name: "滑块",
-        key: "1573784784000_33225",
-        model: "slider_1573784784000_33225",
-        rules: []
-      }]
-    }],
-    options: {
-      gutter: 0,
-      justify: "start",
-      align: "top",
-      remoteFunc: "func_1573784776000_66897"
-    },
-    name: "自定义布局11",
-    // key: "1573784776000_66897",
-    // model: "grid_1573784776000_66897",
-    rules: []
+    type: 'custom',
+    name: "自定义组件组",
+    icon: 'icon-grid-',
+    list: [],
+    options: {}
   }
 ]

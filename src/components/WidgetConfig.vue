@@ -1,7 +1,7 @@
 <template>
   <div v-if="show">
     <el-form label-position="top">
-      <el-form-item label="字段标识" v-if="data.type!='grid'">
+      <el-form-item label="字段标识" v-if="data.type!='grid' && data.type!='custom'">
         <el-input v-model="data.model"></el-input>
       </el-form-item>
       <el-form-item label="标题" v-if="data.type!='grid'">
@@ -357,7 +357,7 @@
         <el-input v-model.number="data.options.customClass"></el-input>
       </el-form-item>
 
-      <template v-if="data.type != 'grid'">
+      <template v-if="data.type != 'grid' && data.type != 'custom'">
         <el-form-item label="操作属性">
           <el-checkbox v-model="data.options.readonly" v-if="Object.keys(data.options).indexOf('readonly')>=0">完全只读</el-checkbox>
           <el-checkbox v-model="data.options.disabled" v-if="Object.keys(data.options).indexOf('disabled')>=0">禁用	</el-checkbox>
@@ -574,19 +574,15 @@ export default {
       }
     },
     'data.options.required': function(val) {
-      console.log('watch data.options.required', this.data.options.required)
       this.validateRequired(val)
     },
     'data.options.dataType': function (val) {
-      console.log('watch data.options.dataType', this.data.options.dataType)
       this.validateDataType(val)
     },
     'data.options.pattern': function (val) {
-      console.log('watch data.options.pattern', this.data.options.pattern)
       this.valiatePattern(val)
     },
     'data.name': function (val) {
-      console.log('watch data.name', this.data)
       if (this.data.options) {
         this.validateRequired(this.data.options.required)
         this.validateDataType(this.data.options.dataType)

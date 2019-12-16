@@ -13,46 +13,90 @@
         <transition-group name="fade" tag="div" class="widget-form-list">
           <template v-for="(element, index) in data.list">
             <template v-if="element.type == 'grid'">
-                <el-row class="widget-col widget-view" v-if="element && element.key" :key="element.key" 
-                  type="flex"
-                  :class="{active: selectWidget.key == element.key}"
-                  :gutter="element.options.gutter ? element.options.gutter : 0"
-                  :justify="element.options.justify"
-                  :align="element.options.align"
-                  @click.native="handleSelectWidget(index)">
-                  <el-col  v-for="(col, colIndex) in element.columns" :key="colIndex" :span="col.span ? col.span : 0">
-                    
-                      <draggable
-                        v-model="col.list"
-                        :no-transition-on-drag="true"
-                        v-bind="{group:'people', ghostClass: 'ghost',animation: 200, handle: '.drag-widget'}"
-                        @end="handleMoveEnd"
-                        @add="handleWidgetColAdd($event, element, colIndex)"
-                      >
-                        <transition-group name="fade" tag="div" class="widget-col-list">
-                          <template v-for="(el, i) in col.list">
-                            <widget-form-item 
-                              v-if="el.key"
-                              :key="el.key"
-                              :element="el" 
-                              :select.sync="selectWidget" 
-                              :index="i" 
-                              :data="col">
-                            </widget-form-item>
-                          </template>
-                        </transition-group>
-                      </draggable>
-                  </el-col>
-                  <div class="widget-view-action widget-col-action" v-if="selectWidget.key == element.key">
-        
-                    <i class="iconfont icon-trash" @click.stop="handleWidgetDelete(index)"></i>
-                  </div>
+              <el-row class="widget-col widget-view" v-if="element && element.key" :key="element.key" 
+                type="flex"
+                :class="{active: selectWidget.key == element.key}"
+                :gutter="element.options.gutter ? element.options.gutter : 0"
+                :justify="element.options.justify"
+                :align="element.options.align"
+                @click.native="handleSelectWidget(index)">
+                <el-col  v-for="(col, colIndex) in element.columns" :key="colIndex" :span="col.span ? col.span : 0">
+                  
+                  <draggable
+                    v-model="col.list"
+                    :no-transition-on-drag="true"
+                    v-bind="{group:'people', ghostClass: 'ghost',animation: 200, handle: '.drag-widget'}"
+                    @end="handleMoveEnd"
+                    @add="handleWidgetColAdd($event, element, colIndex)"
+                  >
+                    <transition-group name="fade" tag="div" class="widget-col-list">
+                      <template v-for="(el, i) in col.list">
+                        <widget-form-item 
+                          v-if="el.key"
+                          :key="el.key"
+                          :element="el" 
+                          :select.sync="selectWidget" 
+                          :index="i" 
+                          :data="col">
+                        </widget-form-item>
+                      </template>
+                    </transition-group>
+                  </draggable>
+                </el-col>
+                <div class="widget-view-action widget-col-action" v-if="selectWidget.key == element.key">
+      
+                  <i class="iconfont icon-trash" @click.stop="handleWidgetDelete(index)"></i>
+                </div>
 
-                  <div class="widget-view-drag widget-col-drag" v-if="selectWidget.key == element.key">
-                    <i class="iconfont icon-drag drag-widget"></i>
-                  </div>
-                </el-row>
+                <div class="widget-view-drag widget-col-drag" v-if="selectWidget.key == element.key">
+                  <i class="iconfont icon-drag drag-widget"></i>
+                </div>
+              </el-row>
             </template>
+
+            <template v-else-if="element.type == 'custom'">
+              <div
+                class="widget-col widget-view"
+                :class="{active: selectWidget.key == element.key}"
+                
+                v-if="element && element.key" 
+                :key="element.key"
+                @click="handleSelectWidget(index)"
+              >
+                <draggable
+                  v-model="element.list"
+                  
+                  :no-transition-on-drag="true"
+                  v-bind="{group:'people', ghostClass: 'ghost',animation: 200, handle: '.drag-widget'}"
+                  @end="handleMoveEnd"
+                  @add="handleWidgetCustomAdd($event, element)"
+                >
+                  <transition-group name="fade" tag="div" style="min-height: 50px;">
+                    <template v-for="(el, i) in element.list">
+                      <widget-form-item 
+                        v-if="el.key"
+                        :key="el.key"
+                        :element="el" 
+                        :select.sync="selectWidget" 
+                        :index="i" 
+                        :data="element">
+                      </widget-form-item>
+                    </template>
+                  </transition-group>
+                </draggable>
+
+                <div class="widget-view-action widget-col-action" v-if="selectWidget.key == element.key">
+      
+                  <i class="iconfont icon-trash" @click.stop="handleWidgetDelete(index)"></i>
+                </div>
+
+                <div class="widget-view-drag widget-col-drag" v-if="selectWidget.key == element.key">
+                  <i class="iconfont icon-drag drag-widget"></i>
+                </div>
+              </div>
+            </template>
+
+
             <template v-else>
               <widget-form-item
                 v-if="element && element.key"
@@ -146,6 +190,16 @@ export default {
           })
         }
       }
+
+      if (data.type === 'custom') {
+        console.log('custom')
+        newData = {
+          ...newData,
+          // 为内部子表单组件添加 key  需要递归处理
+          list: newData.list.map((item, index) => this.widgetFormFormat(item, index))
+        }
+      }
+
       return newData
     },
     handleWidgetColAdd ($event, row, colIndex) {
@@ -164,33 +218,18 @@ export default {
         return false
       }
 
-      const key = Date.parse(new Date()) + '_' + Math.ceil(Math.random() * 99999)
-
-      this.$set(row.columns[colIndex].list, newIndex, {
-        ...row.columns[colIndex].list[newIndex],
-        options: {
-          ...row.columns[colIndex].list[newIndex].options,
-          remoteFunc: 'func_' + key
-        },
-        key,
-        // 绑定键值
-        model: row.columns[colIndex].list[newIndex].type + '_' + key,
-        rules: []
-      })
-
-      if (row.columns[colIndex].list[newIndex].type === 'radio' || row.columns[colIndex].list[newIndex].type === 'checkbox' || row.columns[colIndex].list[newIndex].type === 'select') {
-        this.$set(row.columns[colIndex].list, newIndex, {
-          ...row.columns[colIndex].list[newIndex],
-          options: {
-            ...row.columns[colIndex].list[newIndex].options,
-            options: row.columns[colIndex].list[newIndex].options.options.map(item => ({
-              ...item
-            }))
-          }
-        })
-      }
-
+      this.$set(row.columns[colIndex].list, newIndex, this.widgetFormFormat(row.columns[colIndex].list[newIndex]))
+     
       this.selectWidget = row.columns[colIndex].list[newIndex]
+    },
+    handleWidgetCustomAdd($event, group) {
+      const newIndex = $event.newIndex
+      const oldIndex = $event.oldIndex
+      const item = $event.item
+
+      this.$set(group.list, newIndex, this.widgetFormFormat(group.list[newIndex]))
+
+      this.selectWidget = group.list[newIndex]
     },
     handleWidgetDelete (index) {
       if (this.data.list.length - 1 === index) {

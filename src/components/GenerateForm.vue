@@ -24,7 +24,7 @@
 
               <template v-for="citem in col.list" >
                 <el-form-item v-if="citem.type=='blank'" :label="citem.name" :prop="citem.model" :key="citem.key">
-                  <slot :name="citem.model" :model="models"></slot>
+                  <slot :name="citem.options.slotName" :model="models" :label="item.model"></slot>
                 </el-form-item>
                 <genetate-form-item v-else 
                   :key="citem.key" 
@@ -46,6 +46,25 @@
           <el-form-item :label="item.name" :prop="item.model" :key="item.key">
             <slot :name="item.options.slotName" :model="models" :label="item.model"></slot>
           </el-form-item>
+        </template>
+
+        <!-- 自定义组件组 -->
+        <template v-else-if="item.type == 'custom'">
+          <template v-for="citem in item.list" >
+            <el-form-item v-if="citem.type=='blank'" :label="citem.name" :prop="citem.model" :key="citem.key">
+              <slot :name="citem.options.slotName" :model="models" :label="item.model"></slot>
+            </el-form-item>
+            <genetate-form-item v-else 
+              :key="citem.key" 
+              :models.sync="models" 
+              :remote="remote" 
+              :rules="rules" 
+              :widget="citem"
+              @input-change="onInputChange"
+              @add-linkage="onAddLinkage"
+            >
+            </genetate-form-item>
+          </template>
         </template>
 
         <template v-else>
@@ -108,6 +127,8 @@ export default {
           genList[i].columns.forEach(item => {
             this.generateModle(item.list)
           })
+        } else if (genList[i].type === 'custom'){
+          this.generateModle(genList[i].list.list)
         } else {
           /**
            * 设置表单项默认值 model
@@ -219,6 +240,3 @@ export default {
 }
 </script>
 
-<style lang="scss">
-// @import '../styles/cover.scss';
-</style>
