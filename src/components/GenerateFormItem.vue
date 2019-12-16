@@ -276,9 +276,10 @@ export default {
     update(value) {
       console.log('update', value)
       const key = this.widget.options.linkage.key
-      this.fetchOptions({
-        key: value
-      })
+      const params = JSON.parse(`{
+        "${key}": "${value}"
+      }`)
+      this.fetchOptions(params)
     }
   },
   watch: {
