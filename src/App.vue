@@ -2,10 +2,10 @@
   <div id="app">
     <div class="fm-header">
       <img class="fm-logo" src="./assets/logo.png">
-      <div class="fm-title" @click="handleHome">{{$t('header.title')}}</div>
+      <div class="fm-title" @click="handleHome">表单设计器</div>
 
       <div class="fm-link">
-        <a target="_blank" href="http://docs.form.xiaoyaoji.cn">{{$t('header.document')}}</a>
+        <a target="_blank" href="http://docs.form.xiaoyaoji.cn">使用文档</a>
         <a target="_blank" href="https://github.com/GavinZhuLei/vue-form-making">GitHub</a>
       </div>
     </div>

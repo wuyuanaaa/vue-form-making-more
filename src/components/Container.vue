@@ -334,7 +334,7 @@ export default {
         if (!this.jsonClipboard) {
           this.jsonClipboard = new Clipboard('.json-btn')
           this.jsonClipboard.on('success', (e) => {
-            this.$message.success(this.$t('fm.message.copySuccess'))
+            this.$message.success('复制成功')
           })
         }
         this.jsonCopyValue = JSON.stringify(this.widgetForm)
