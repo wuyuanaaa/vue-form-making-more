@@ -107,9 +107,30 @@
           form
         >
           <generate-form insite="true" @on-change="handleDataChange" v-if="previewVisible" :data="widgetForm" :value="widgetModels" :remote="remoteFuncs" ref="generateForm">
-            <template v-slot:widthAndHeight="{model, label}">
-              Width <el-input v-model="model[label].width" style="width: 100px"></el-input>
-              Height <el-input v-model="model[label].height" style="width: 100px"></el-input>
+            <template v-slot:string="{model, label}">
+              <div>需在调用 generate-form 时手动写入插槽</div>
+              <div>插槽参数调用为 scope.model[scope.label]</div>
+              <div>示例：'model[label]' <el-input v-model="model[label]" style="width: 100px"></el-input></div>
+            </template>
+
+            <template v-slot:object="{model, label}">
+              <div>需在调用 generate-form 时手动写入插槽</div>
+              <div>插槽参数调用为 scope.model[scope.label]</div>
+              <div>示例：</div> 
+              <div>
+                'model[label].width' <el-input v-model="model[label].width" style="width: 100px"></el-input>
+                'model[label].height' <el-input v-model="model[label].height" style="width: 100px"></el-input>
+              </div> 
+            </template>
+
+            <template v-slot:array="{model, label}">
+              <div>需在调用 generate-form 时手动写入插槽</div>
+              <div>插槽参数调用为 scope.model[scope.label]</div>
+              <div>示例：</div> 
+              <div>
+                'model[label][0]' <el-input v-model="model[label][0]" style="width: 100px"></el-input>
+                'model[label][1]' <el-input v-model="model[label][1]" style="width: 100px"></el-input>
+              </div>
             </template>
           </generate-form>
 

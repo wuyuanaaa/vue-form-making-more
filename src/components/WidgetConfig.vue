@@ -299,18 +299,16 @@
 
       <template v-if="data.type=='blank'">
         <el-form-item label="自定义区域key">
-          <el-select v-model="data.options.slotName" @change="handleBlankSlotChange">
-            <el-option value="widthAndHeight" label="宽高"></el-option>
-          </el-select>
+          <el-input v-model="data.options.slotName" placeholder="测试输入'string'/'object'/'array'"></el-input>
         </el-form-item>
-        <!-- 此处数据类型改为自动替换 见 handleBlankSlotChange 方法 -->
-        <!-- <el-form-item label="绑定数据类型">
+        
+        <el-form-item label="绑定数据类型">
           <el-select v-model="data.options.defaultType">
             <el-option value="String" label="字符串"></el-option>
             <el-option value="Object" label="对象"></el-option>
             <el-option value="Array" label="数组"></el-option>
           </el-select>
-        </el-form-item> -->
+        </el-form-item>
 
       </template>
 
@@ -396,9 +394,6 @@
 import Draggable from 'vuedraggable'
 import request from '../util/request'
 
-const BLANK_SLOT_DEFAULT_TYPE = {
-  widthAndHeight: 'Object'
-}
 
 export default {
   components: {
@@ -476,13 +471,6 @@ export default {
           this.data.options.defaultValue = ''
         }
       }
-    },
-    /**
-     * 自定义区域
-     */
-    handleBlankSlotChange(val) {
-      console.log(val)
-      this.data.options.defaultType = BLANK_SLOT_DEFAULT_TYPE[val]
     },
     /**
      * 修正校验必填属性

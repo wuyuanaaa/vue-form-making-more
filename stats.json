@@ -1,0 +1,82 @@
+
+ WARNING  Compiled with 3 warnings15:38:28
+
+ warning  
+
+asset size limit: The following asset(s) exceed the recommended size limit (244 KiB).
+This can impact web performance.
+Assets: 
+  FormMaking.common.js (598 KiB)
+
+ warning  
+
+entrypoint size limit: The following entrypoint(s) combined asset size exceeds the recommended limit (244 KiB). This can impact web performance.
+Entrypoints:
+  FormMaking.common (635 KiB)
+      FormMaking.css
+      FormMaking.common.js
+
+
+ warning  
+
+webpack performance recommendations: 
+You can limit the size of your bundles by using import() or require.ensure to lazy load some parts of your application.
+For more info visit https://webpack.js.org/guides/code-splitting/
+
+ WARNING  Compiled with 3 warnings15:38:29
+
+ warning  
+
+asset size limit: The following asset(s) exceed the recommended size limit (244 KiB).
+This can impact web performance.
+Assets: 
+  FormMaking.umd.min.js (599 KiB)
+
+ warning  
+
+entrypoint size limit: The following entrypoint(s) combined asset size exceeds the recommended limit (244 KiB). This can impact web performance.
+Entrypoints:
+  FormMaking.umd.min (635 KiB)
+      FormMaking.css
+      FormMaking.umd.min.js
+
+
+ warning  
+
+webpack performance recommendations: 
+You can limit the size of your bundles by using import() or require.ensure to lazy load some parts of your application.
+For more info visit https://webpack.js.org/guides/code-splitting/
+
+ WARNING  Compiled with 3 warnings15:38:29
+
+ warning  
+
+asset size limit: The following asset(s) exceed the recommended size limit (244 KiB).
+This can impact web performance.
+Assets: 
+  FormMaking.umd.js (599 KiB)
+
+ warning  
+
+entrypoint size limit: The following entrypoint(s) combined asset size exceeds the recommended limit (244 KiB). This can impact web performance.
+Entrypoints:
+  FormMaking.umd (635 KiB)
+      FormMaking.css
+      FormMaking.umd.js
+
+
+ warning  
+
+webpack performance recommendations: 
+You can limit the size of your bundles by using import() or require.ensure to lazy load some parts of your application.
+For more info visit https://webpack.js.org/guides/code-splitting/
+
+  File                          Size                   Gzipped
+
+  dist\FormMaking.umd.min.js    598.62 KiB             153.55 KiB
+  dist\FormMaking.umd.js        598.70 KiB             153.59 KiB
+  dist\FormMaking.common.js     598.46 KiB             153.52 KiB
+  dist\FormMaking.css           36.17 KiB              13.31 KiB
+
+  Images and other types of assets omitted.
+

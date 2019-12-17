@@ -44,7 +44,6 @@
                   </draggable>
                 </el-col>
                 <div class="widget-view-action widget-col-action" v-if="selectWidget.key == element.key">
-      
                   <i class="iconfont icon-trash" @click.stop="handleWidgetDelete(index)"></i>
                 </div>
 
@@ -58,14 +57,12 @@
               <div
                 class="widget-col widget-view"
                 :class="{active: selectWidget.key == element.key}"
-                
                 v-if="element && element.key" 
                 :key="element.key"
                 @click="handleSelectWidget(index)"
               >
                 <draggable
                   v-model="element.list"
-                  
                   :no-transition-on-drag="true"
                   v-bind="{group:'people', ghostClass: 'ghost',animation: 200, handle: '.drag-widget'}"
                   @end="handleMoveEnd"
@@ -86,7 +83,6 @@
                 </draggable>
 
                 <div class="widget-view-action widget-col-action" v-if="selectWidget.key == element.key">
-      
                   <i class="iconfont icon-trash" @click.stop="handleWidgetDelete(index)"></i>
                 </div>
 
