@@ -1,56 +1,51 @@
-# vue-form-making
-
-[简体中文](./README.zh-CN.md) | English
-
-## Intro
-
-The FormMaking developed base on [vue](https://github.com/vuejs/vue) and [element-ui](https://github.com/ElemeFE/element), equipts with the latest front-end technology stack, built-in i18n internationalization solution, all of those are aimed at making developmemt simpler, and more efficiently.
-
-- [Preview](http://form.xiaoyaoji.cn/basic-version)
-
-- [Document](http://docs.form.xiaoyaoji.cn)
-
-- [Advanced](http://form.xiaoyaoji.cn) Privade more components and APIs
-
-## Feature
-
-* Visual configuration page
-* Provide grid layout and align with flex
-* One-click preview of configuration effects
-* One-click generation of configuration json data
-* One-click generate code, ready to run
-* Provide custom components to meet user's custom requirements
-* Provides a remote data interface for users to asynchronously fetch data
-* Provides powerful advanced components
-* Support for form validation
-* Get form data quickly
-* Internationalization support
-
-## Module
-
-- [MakingForm](http://docs.form.xiaoyaoji.cn/zh/guide/making-form.html) (Quickly design the form page based on the visual operation and obtain the form configuration json data).
-
-- [GenerateForm](http://docs.form.xiaoyaoji.cn/zh/guide/generate-form.html) (The generator will render a form page quickly base on the configuration json data captured in the designer).
-
-## Issue
-
-* If you find a new bug or have a new feature request, please create a new issue.
+# vue-form-making-more
 
 
-## Donation  
+## 简介
 
-If you do like ours open source, would you mind to buy us a cup of coffee :) lol ☺
+基于 [vue-form-making](https://github.com/GavinZhulei/vue-form-making/)的基础版做了些功能拓展，同时修复基础版中的一些 BUG，优化了部分逻辑及代码格式，并新增大量注释；
 
-![](http://tools.xiaoyaoji.cn/donation.jpeg)
+更符合实际项目的动态表单生成需求
 
-[PayPal Me](https://paypal.me/gavinzhulei)
+> 关于 vue-form-making:
 
-## Open source Licenses
+> 基于 [vue](https://github.com/vuejs/vue) 和 [element-ui](https://github.com/ElemeFE/element) 实现的表单设计器，使用了最新的前端技术栈，内置了 i18n 国际化解决方案，可以让表单开发简单而高效。
+
+> - [使用文档](http://docs.form.xiaoyaoji.cn)
+
+## 特性
+
+> 带 new 为新增/优化内容
+
+* 提供自定义组件组，快速搭建表单页（new）
+* 支持自定义组件组的保存及拉取（new）
+* 提供远程 API 配置，可以设置通过 API 获取表单数据（new）
+* 支持表单联动，API 模式下可以根据其他表单联动更新数据（new）
+* 可视化配置页面
+* 提供栅格布局，并采用flex实现对齐
+* 一键预览配置的效果
+* 一键生成配置json数据
+* 一键生成代码，立即可运行
+* 提供自定义组件满足用户自定义需求
+* 提供远端数据接口，方便用户需要异步获取数据加载
+* 提供功能强大的高级组件
+* 支持表单验证
+* 快速获取表单数据
+
+## 组件
+
+- MakingForm 表单设计器（基于可视化操作快速设计出表单页面，并获取到表单配置 json 数据）。
+
+- GenerateForm 表单生成器（根据设计器中获取的配置 json 数据，快速渲染出表单页面）。
+
+## 开源协议
 
 [LGPL](https://opensource.org/licenses/LGPL-3.0)
 
-You can use the vue-form-making source code in an open source project under the LGPL license and retain the copyright information.
+您可以将 vue-form-making 源码用于 LGPL 协议的开源项目中，并保留版权信息。
 
-## Business License
+## 商业许可
 
-If you want to use vue-form-making source code in non-open source sites, projects and applications, you need to purchase [Commercial License](http://form.xiaoyaoji.cn/pricing).
+商业许可遵循 vue-form-making ，请联系原作者
+
+如果要将 vue-form-making 源码使用在非开源站点，项目和应用程序中，为保障您的合法权益，需购买[商业授权](http://form.xiaoyaoji.cn/pricing)。
