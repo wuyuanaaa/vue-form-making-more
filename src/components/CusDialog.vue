@@ -1,5 +1,7 @@
 <template>
   <el-dialog
+    :id="id"
+    ref="elDialog"
     class="cus-dialog-container"
     :title="title"
     :visible.sync="dialogVisible"
@@ -7,18 +9,21 @@
     append-to-body
     center
     :width="width"
-    ref="elDialog"
-    :id="id"
-    >
+  >
     <span v-if="show">
-      <slot></slot>
+      <slot />
     </span>
 
-    <span v-if="action" slot="footer" class="dialog-footer" v-loading="loading"
-      :element-loading-text="loadingText">
+    <span
+      v-if="action"
+      slot="footer"
+      v-loading="loading"
+      class="dialog-footer"
+      :element-loading-text="loadingText"
+    >
       <slot name="action">
         <el-button @click="close">取 消</el-button>
-        <el-button type="primary" @click="submit" >确 定</el-button>
+        <el-button type="primary" @click="submit">确 定</el-button>
       </slot>
     </span>
   </el-dialog>
@@ -49,16 +54,7 @@ export default {
       default: true
     }
   },
-  computed: {
-    show () {
-      if (this.form) {
-        return this.showForm
-      } else {
-        return true
-      }
-    }
-  },
-  data () {
+  data() {
     return {
       loading: false,
       dialogVisible: this.visible,
@@ -66,23 +62,17 @@ export default {
       showForm: false
     }
   },
-  methods: {
-    close () {
-      this.dialogVisible = false
-    },
-    submit () {
-      this.loading = true
-
-      this.$emit('on-submit')
-    },
-    end () {
-      this.loading = false
+  computed: {
+    show() {
+      if (this.form) {
+        return this.showForm
+      } else {
+        return true
+      }
     }
   },
-  mounted () {
-  },
   watch: {
-    dialogVisible (val) {
+    dialogVisible(val) {
       if (!val) {
         this.loading = false
         this.$emit('on-close')
@@ -93,8 +83,23 @@ export default {
         this.showForm = true
       }
     },
-    visible (val) {
+    visible(val) {
       this.dialogVisible = val
+    }
+  },
+  mounted() {
+  },
+  methods: {
+    close() {
+      this.dialogVisible = false
+    },
+    submit() {
+      this.loading = true
+
+      this.$emit('on-submit')
+    },
+    end() {
+      this.loading = false
     }
   }
 }

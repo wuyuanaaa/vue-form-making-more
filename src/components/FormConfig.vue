@@ -1,15 +1,16 @@
 <template>
   <div class="form-config-container">
-    <el-form label-position="top">
+    <el-form label-position="top" size="mini">
       <el-form-item label="表单标签宽度">
 
         <el-switch
           v-model="data.labelauto"
           active-text="自动宽度"
-          inactive-text="手动设置">
+          inactive-text="手动设置"
         >
+          >
         </el-switch>
-        <el-input-number v-if="!data.labelauto" v-model="data.labelWidth" :min="0" :max="200" :step="10"></el-input-number>
+        <el-input-number v-if="!data.labelauto" v-model="data.labelWidth" :min="0" :max="200" :step="10" />
       </el-form-item>
 
       <el-form-item label="表单对齐（左右对齐仅在标签手动宽度生效）">
@@ -33,6 +34,11 @@
 
 <script>
 export default {
-  props: ['data']
+  props: {
+    data: {
+      type: Object,
+      required: true
+    }
+  }
 }
 </script>

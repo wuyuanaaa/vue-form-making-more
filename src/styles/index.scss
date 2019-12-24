@@ -26,6 +26,10 @@ $primary-background-color: #ecf5ff;
     height: 100% !important;
   }
 
+  .el-aside {
+    margin-bottom: 0;
+  }
+
   &>.el-container{
     background: #fff;
   }
@@ -76,12 +80,17 @@ $primary-background-color: #ecf5ff;
     position: relative;
     background: #fafafa;
   }
+
+  .widgetForm-content {
+    height: 100%;
+    overflow-x: hidden;
+  }
 }
 
 .components-list{
   padding: 8px 0;
-  width: 100%;
   height: 100%;
+  overflow-x: hidden;
 
   .widget-cate{
     padding: 8px 12px;
@@ -143,7 +152,7 @@ $primary-background-color: #ecf5ff;
   left: 0;
   right: 0;
   bottom: 0;
-
+  overflow-x: hidden;
   
 
   .widget-form-list{
@@ -160,7 +169,7 @@ $primary-background-color: #ecf5ff;
     }
 
     .widget-view{
-      padding-bottom: 18px;
+      padding: 10px;
       position: relative;
       border: 1px dashed rgba(170,170,170,0.7);
       background-color: rgba(236, 245, 255, .3);
@@ -168,6 +177,10 @@ $primary-background-color: #ecf5ff;
 
       .el-form-item__content{
         position: unset;
+      }
+
+      .el-slider__button-wrapper {
+        z-index: 0;
       }
 
       &.is_req{
@@ -195,7 +208,7 @@ $primary-background-color: #ecf5ff;
         background: $primary-color;
         z-index: 9;
 
-        i{
+        i, .svg-icon{
           font-size: 14px;
           color: #fff;
           margin: 0 5px;
@@ -328,12 +341,11 @@ $primary-background-color: #ecf5ff;
             background: $primary-color;
             z-index: 9;
     
-            i{
+            i, .svg-icon {
               font-size: 14px;
               color: #fff;
               margin: 0 5px;
               cursor: pointer;
-              
             }
           }
     
@@ -348,7 +360,7 @@ $primary-background-color: #ecf5ff;
             z-index: 9;
             // display: none;
     
-            i{
+            i, .svg-icon{
               font-size: 14px;
               color: #fff;
               margin: 0 5px;
@@ -649,12 +661,27 @@ $primary-background-color: #ecf5ff;
   }
 }
 
+.fm2-components {
+  padding:0;
+  background: #fff;
+  a {
+    color: #333;
+  }
+}
+
 .widget-config-container{
   position: relative;
+  padding: 0;
+  font-size: 0;
+  background: #fff;
 
   .el-header{
     border-bottom: solid 2px #e4e7ed;
     padding: 0 5px;
+  }
+
+  .el-form-item {
+    margin-bottom: 10px;
   }
 
   .config-tab{
@@ -674,7 +701,11 @@ $primary-background-color: #ecf5ff;
   }
 
   .config-content{
-    padding: 10px;
+    overflow-x: hidden;
+
+    .el-form {
+      padding: 10px;
+    }
 
     .el-form-item__label{
       padding: 0;

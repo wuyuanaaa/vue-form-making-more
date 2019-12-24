@@ -1,68 +1,109 @@
 <template>
-  <el-form-item class="widget-view "
-      v-if="element && element.key" 
-      :class="{active: selectWidget.key == element.key, 'is_req': element.options.required}"
-      :label="element.name"
-      @click.native.stop="handleSelectWidget(index)"
-    >
+  <div>
+    <template v-if="element.type==='title'">
+      <div
+        class="widget-view"
+        :class="{active: selectWidget.key == element.key, 'is_req': element.options.required}"
+        @click.stop="handleSelectWidget(index)"
+      >
+
+        <div
+          v-if="element.type==='title'"
+          :style="{
+            fontSize: element.options.style.fontSize + 'px',
+            fontWeight: element.options.style.bold ? 'bold' : 'normal',
+            marginTop: element.options.style.marginTop + 'px',
+            marginBottom: element.options.style.marginBottom + 'px',
+            marginLeft: element.options.style.marginLeft + 'px',
+          }"
+        >
+          {{ element.name }}
+        </div>
+
+        <div v-if="selectWidget.key == element.key" class="widget-view-action">
+          <svg-icon icon-class="clone" @click.stop="handleWidgetClone(index)" />
+          <i class="el-icon-delete" @click.stop="handleWidgetDelete(index)" />
+        </div>
+
+        <div v-if="selectWidget.key == element.key" class="widget-view-drag">
+          <i class="el-icon-rank drag-widget" />
+        </div>
+      </div>
+    </template>
+    <template v-else>
+      <el-form-item
+        v-if="element && element.key"
+        class="widget-view"
+        :class="{active: selectWidget.key == element.key, 'is_req': element.options.required}"
+        :label="element.name"
+        @click.native.stop="handleSelectWidget(index)"
+      >
         <template v-if="element.type == 'input'">
-          <el-input 
+          <el-input
             v-model="element.options.defaultValue"
             :style="{width: element.options.width}"
             :placeholder="element.options.placeholder"
             :disabled="element.options.disabled"
-          ></el-input>
+          />
         </template>
 
         <template v-if="element.type == 'textarea'">
-          <el-input type="textarea" :rows="5"
+          <el-input
             v-model="element.options.defaultValue"
+            type="textarea"
+            :rows="5"
             :style="{width: element.options.width}"
             :disabled="element.options.disabled"
             :placeholder="element.options.placeholder"
-          ></el-input>
+          />
         </template>
 
         <template v-if="element.type == 'number'">
-          <el-input-number 
-            v-model="element.options.defaultValue" 
+          <el-input-number
+            v-model="element.options.defaultValue"
             :disabled="element.options.disabled"
             :controls-position="element.options.controlsPosition"
             :style="{width: element.options.width}"
-          ></el-input-number>
+          />
+          <span style="margin-left:4px">{{ element.options.unit }}</span>
         </template>
 
         <template v-if="element.type == 'radio'">
-          <el-radio-group v-model="element.options.defaultValue"
+          <el-radio-group
+            v-model="element.options.defaultValue"
             :style="{width: element.options.width}"
             :disabled="element.options.disabled"
           >
-            <el-radio  
+            <el-radio
+              v-for="(item, i) in element.options.options"
+              :key="item.value + i"
               :style="{display: element.options.inline ? 'inline-block' : 'block'}"
-              :label="item.value" v-for="(item, index) in element.options.options" :key="item.value + index"
-              
+              :label="item.value"
             >
-              {{element.options.showLabel ? item.label : item.value}}
+              {{ element.options.showLabel ? item.label : item.value }}
             </el-radio>
           </el-radio-group>
         </template>
 
         <template v-if="element.type == 'checkbox'">
-          <el-checkbox-group v-model="element.options.defaultValue"
+          <el-checkbox-group
+            v-model="element.options.defaultValue"
             :style="{width: element.options.width}"
             :disabled="element.options.disabled"
           >
             <el-checkbox
+              v-for="(item, i) in element.options.options"
+              :key="item.value + i"
               :style="{display: element.options.inline ? 'inline-block' : 'block'}"
-              :label="item.value" v-for="(item, index) in element.options.options" :key="item.value + index"
+              :label="item.value"
             >
-              {{element.options.showLabel ? item.label : item.value}}
+              {{ element.options.showLabel ? item.label : item.value }}
             </el-checkbox>
           </el-checkbox-group>
         </template>
 
         <template v-if="element.type == 'time'">
-          <el-time-picker 
+          <el-time-picker
             v-model="element.options.defaultValue"
             :is-range="element.options.isRange"
             :placeholder="element.options.placeholder"
@@ -72,10 +113,9 @@
             :disabled="element.options.disabled"
             :editable="element.options.editable"
             :clearable="element.options.clearable"
-            :arrowControl="element.options.arrowControl"
+            :arrow-control="element.options.arrowControl"
             :style="{width: element.options.width}"
-          >
-          </el-time-picker>
+          />
         </template>
 
         <template v-if="element.type == 'date'">
@@ -90,25 +130,25 @@
             :disabled="element.options.disabled"
             :editable="element.options.editable"
             :clearable="element.options.clearable"
-            :style="{width: element.options.width}"  
-          >
-          </el-date-picker>
+            :style="{width: element.options.width}"
+          />
         </template>
 
         <template v-if="element.type == 'rate'">
-          <el-rate v-model="element.options.defaultValue"
+          <el-rate
+            v-model="element.options.defaultValue"
             :max="element.options.max"
             :disabled="element.options.disabled"
             :allow-half="element.options.allowHalf"
-          ></el-rate>
+          />
         </template>
 
         <template v-if="element.type == 'color'">
-          <el-color-picker 
+          <el-color-picker
             v-model="element.options.defaultValue"
             :disabled="element.options.disabled"
             :show-alpha="element.options.showAlpha"
-          ></el-color-picker>
+          />
         </template>
 
         <template v-if="element.type == 'select'">
@@ -120,7 +160,7 @@
             :placeholder="element.options.placeholder"
             :style="{width: element.options.width}"
           >
-            <el-option v-for="item in element.options.options" :key="item.value" :value="item.value" :label="element.options.showLabel?item.label:item.value"></el-option>
+            <el-option v-for="item in element.options.options" :key="item.value" :value="item.value" :label="element.options.showLabel?item.label:item.value" />
           </el-select>
         </template>
 
@@ -128,12 +168,11 @@
           <el-switch
             v-model="element.options.defaultValue"
             :disabled="element.options.disabled"
-          >
-          </el-switch>
+          />
         </template>
 
         <template v-if="element.type=='slider'">
-          <el-slider 
+          <el-slider
             v-model="element.options.defaultValue"
             :min="element.options.min"
             :max="element.options.max"
@@ -142,21 +181,7 @@
             :show-input="element.options.showInput"
             :range="element.options.range"
             :style="{width: element.options.width}"
-          ></el-slider>
-        </template>
-
-        <template v-if="element.type=='imgupload'">
-          <fm-upload
-            v-model="element.options.defaultValue"
-            :disabled="element.options.disabled"
-            :style="{'width': element.options.width}"
-            :width="element.options.size.width"
-            :height="element.options.size.height"
-            token="xxx"
-            domain="xxx"
-          >
-            
-          </fm-upload>
+          />
         </template>
 
         <template v-if="element.type == 'cascader'">
@@ -167,17 +192,14 @@
             :placeholder="element.options.placeholder"
             :style="{width: element.options.width}"
             :options="element.options.remoteOptions"
-          >
-
-          </el-cascader>
+          />
         </template>
 
         <template v-if="element.type == 'editor'">
           <vue-editor
             v-model="element.options.defaultValue"
             :style="{width: element.options.width}"
-          >
-          </vue-editor>
+          />
         </template>
 
         <template v-if="element.type=='blank'">
@@ -185,44 +207,55 @@
         </template>
 
         <template v-if="element.type == 'text'">
-          <span>{{element.options.defaultValue}}</span>
+          <span>{{ element.options.defaultValue }}</span>
         </template>
 
-        <div class="widget-view-action" v-if="selectWidget.key == element.key">
-          <i class="iconfont icon-icon_clone" @click.stop="handleWidgetClone(index)"></i>
-          <i class="iconfont icon-trash" @click.stop="handleWidgetDelete(index)"></i>
+        <div v-if="selectWidget.key == element.key" class="widget-view-action">
+          <svg-icon icon-class="clone" @click.stop="handleWidgetClone(index)" />
+          <i class="el-icon-delete" @click.stop="handleWidgetDelete(index)" />
         </div>
 
-        <div class="widget-view-drag" v-if="selectWidget.key == element.key">
-          <i class="iconfont icon-drag drag-widget"></i>
+        <div v-if="selectWidget.key == element.key" class="widget-view-drag">
+          <i class="el-icon-rank drag-widget" />
         </div>
-        
-    </el-form-item>
+
+      </el-form-item>
+    </template>
+  </div>
 </template>
 
 <script>
-import FmUpload from './Upload'
-import { VueEditor } from "vue2-editor"
+import { VueEditor } from 'vue2-editor'
 export default {
   name: 'WidgetFormItem',
-  props: ['element', 'select', 'index', 'data'],
   components: {
-    FmUpload,
     VueEditor
   },
-  data () {
+  // eslint-disable-next-line
+  props: ['element', 'select', 'index', 'data'],
+  data() {
     return {
       selectWidget: this.select
     }
   },
-  mounted () {
-    
+  watch: {
+    select(val) {
+      this.selectWidget = val
+    },
+    selectWidget: {
+      handler(val) {
+        this.$emit('update:select', val)
+      },
+      deep: true
+    }
+  },
+  mounted() {
   },
   methods: {
-    handleSelectWidget (index) {
+    handleSelectWidget(index) {
       this.selectWidget = this.data.list[index]
     },
-    handleWidgetDelete (index) {
+    handleWidgetDelete(index) {
       if (this.data.list.length - 1 === index) {
         if (index === 0) {
           this.selectWidget = {}
@@ -237,20 +270,19 @@ export default {
         this.data.list.splice(index, 1)
       })
     },
-    handleWidgetClone (index) {
+    handleWidgetClone(index) {
       let cloneData = {
         ...this.data.list[index],
-        options: {...this.data.list[index].options},
+        options: { ...this.data.list[index].options },
         key: Date.parse(new Date()) + '_' + Math.ceil(Math.random() * 99999)
       }
 
       if (this.data.list[index].type === 'radio' || this.data.list[index].type === 'checkbox') {
-
         cloneData = {
           ...cloneData,
           options: {
             ...cloneData.options,
-            options: cloneData.options.options.map(item => ({...item}))
+            options: cloneData.options.options.map(item => ({ ...item }))
           }
         }
       }
@@ -260,17 +292,6 @@ export default {
       this.$nextTick(() => {
         this.selectWidget = this.data.list[index + 1]
       })
-    },
-  },
-  watch: {
-    select (val) {
-      this.selectWidget = val
-    },
-    selectWidget: {
-      handler (val) {
-        this.$emit('update:select', val)
-      },
-      deep: true
     }
   }
 }
