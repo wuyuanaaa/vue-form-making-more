@@ -19,15 +19,17 @@
         >
           {{ element.name }}
         </div>
+        <template v-if="!noControl">
+          <div v-if="selectWidget.key == element.key" class="widget-view-action">
+            <svg-icon icon-class="clone" @click.stop="handleWidgetClone(index)" />
+            <i class="el-icon-delete" @click.stop="handleWidgetDelete(index)" />
+          </div>
 
-        <div v-if="selectWidget.key == element.key" class="widget-view-action">
-          <svg-icon icon-class="clone" @click.stop="handleWidgetClone(index)" />
-          <i class="el-icon-delete" @click.stop="handleWidgetDelete(index)" />
-        </div>
+          <div v-if="selectWidget.key == element.key" class="widget-view-drag">
+            <i class="el-icon-rank drag-widget" />
+          </div>
+        </template>
 
-        <div v-if="selectWidget.key == element.key" class="widget-view-drag">
-          <i class="el-icon-rank drag-widget" />
-        </div>
       </div>
     </template>
     <template v-else>
@@ -210,15 +212,16 @@
           <span>{{ element.options.defaultValue }}</span>
         </template>
 
-        <div v-if="selectWidget.key == element.key" class="widget-view-action">
-          <svg-icon icon-class="clone" @click.stop="handleWidgetClone(index)" />
-          <i class="el-icon-delete" @click.stop="handleWidgetDelete(index)" />
-        </div>
+        <template v-if="!noControl">
+          <div v-if="selectWidget.key == element.key" class="widget-view-action">
+            <svg-icon icon-class="clone" @click.stop="handleWidgetClone(index)" />
+            <i class="el-icon-delete" @click.stop="handleWidgetDelete(index)" />
+          </div>
 
-        <div v-if="selectWidget.key == element.key" class="widget-view-drag">
-          <i class="el-icon-rank drag-widget" />
-        </div>
-
+          <div v-if="selectWidget.key == element.key" class="widget-view-drag">
+            <i class="el-icon-rank drag-widget" />
+          </div>
+        </template>
       </el-form-item>
     </template>
   </div>
@@ -232,7 +235,7 @@ export default {
     VueEditor
   },
   // eslint-disable-next-line
-  props: ['element', 'select', 'index', 'data'],
+  props: ['element', 'select', 'index', 'data', 'noControl'],
   data() {
     return {
       selectWidget: this.select

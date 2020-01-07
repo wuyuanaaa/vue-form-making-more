@@ -2,7 +2,6 @@
   <div>
     <el-form
       ref="generateForm"
-      label-suffix=":"
       :size="data.config.size"
       :model="models"
       :rules="rules"
@@ -99,11 +98,11 @@ export default {
     },
     remote: {
       type: Object,
-      required: true
+      default: () => {}
     },
     value: {
       type: Object,
-      required: true
+      default: () => {}
     }
     /* insite: {
       type: 'Object',
@@ -142,14 +141,11 @@ export default {
     value: {
       deep: true,
       handler(val) {
-        console.log(JSON.stringify(val))
         this.models = { ...this.models, ...val }
       }
     }
   },
   created() {
-    console.log(this.data)
-    console.log(this.rules)
     this.generateModle(this.data.list)
   },
   mounted() {
@@ -230,7 +226,6 @@ export default {
     onInputChange(value, field) {
       if (this.linkageObserver[field]) {
         this.linkageObserver[field].forEach(item => {
-          console.log(this.$refs['generateForm'])
           const children = this.$refs['generateForm'].fields
           const subscriber = children.find(child => child.labelFor === item)
           subscriber && subscriber.$parent.update(value)
@@ -249,8 +244,6 @@ export default {
       } else {
         this.$set(this.linkageObserver, target, [subscriber])
       }
-      console.log(this.linkageObserver)
-      console.log('target', target)
     },
     refresh() {
 

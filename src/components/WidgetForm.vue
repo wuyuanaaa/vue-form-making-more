@@ -1,7 +1,7 @@
 <template>
   <el-scrollbar tag="div" style="height:100%" wrap-class="widget-form-container">
     <div v-if="data.list.length == 0" class="form-empty">从左侧拖拽来添加字段</div>
-    <el-form :size="data.config.size" label-suffix=":" :label-position="data.config.labelPosition" :label-width="labelWidth">
+    <el-form :size="data.config.size" :label-position="data.config.labelPosition" :label-width="labelWidth">
 
       <draggable
         v-model="data.list"
@@ -66,13 +66,8 @@
                 :class="{active: selectWidget.key == element.key}"
                 @click="handleSelectWidget(index)"
               >
-                <draggable
-                  v-model="element.list"
-                  :no-transition-on-drag="true"
-                  v-bind="{group:'people', ghostClass: 'ghost',animation: 200, handle: '.drag-widget'}"
-                  @end="handleMoveEnd"
-                  @add="handleWidgetCustomAdd($event, element)"
-                >
+
+                <template v-if="model">
                   <transition-group name="fade" tag="div" style="min-height: 50px;">
                     <template v-for="(el, i) in element.list">
                       <widget-form-item
@@ -82,10 +77,33 @@
                         :select.sync="selectWidget"
                         :index="i"
                         :data="element"
+                        :no-control="model"
                       />
                     </template>
                   </transition-group>
-                </draggable>
+                </template>
+                <template v-else>
+                  <draggable
+                    v-model="element.list"
+                    :no-transition-on-drag="true"
+                    v-bind="{group:'people', ghostClass: 'ghost',animation: 200, handle: '.drag-widget'}"
+                    @end="handleMoveEnd"
+                    @add="handleWidgetCustomAdd($event, element)"
+                  >
+                    <transition-group name="fade" tag="div" style="min-height: 50px;">
+                      <template v-for="(el, i) in element.list">
+                        <widget-form-item
+                          v-if="el.key"
+                          :key="el.key"
+                          :element="el"
+                          :select.sync="selectWidget"
+                          :index="i"
+                          :data="element"
+                        />
+                      </template>
+                    </transition-group>
+                  </draggable>
+                </template>
 
                 <div v-if="selectWidget.key == element.key" class="widget-view-action widget-col-action">
                   <i class="el-icon-delete" @click.stop="handleWidgetDelete(index)" />
@@ -124,7 +142,7 @@ export default {
     WidgetFormItem
   },
   // eslint-disable-next-line
-  props: ['data', 'select'],
+  props: ['data', 'select', 'model'],
   data() {
     return {
       selectWidget: this.select
@@ -187,10 +205,12 @@ export default {
       }
 
       let newData = JSON.parse(JSON.stringify(data))
-      newData.options.remoteFunc = 'api_' + key
+      !newData.options.remoteFunc && (newData.options.remoteFunc = 'api_' + key)
       newData.key = key
-      newData.model = data.type + '_' + key
-      newData.rules = []
+      !newData.model && (newData.model = data.type + '_' + key)
+      if (!(newData.rules && newData.rules.length)) {
+        newData.rules = []
+      }
 
       if (data.type === 'grid') {
         newData = {
@@ -235,8 +255,6 @@ export default {
     },
     handleWidgetCustomAdd($event, group) {
       const newIndex = $event.newIndex
-      // const oldIndex = $event.oldIndex
-      // const item = $event.item
 
       this.$set(group.list, newIndex, this.widgetFormFormat(group.list[newIndex]))
 

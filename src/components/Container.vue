@@ -4,81 +4,83 @@
       <el-container>
         <el-aside width="250px" class="fm2-components">
           <el-scrollbar tag="div" style="height:100%" wrap-class="components-list">
-            <!-- 基础字段 -->
-            <template v-if="basicFields.length">
-              <div class="widget-cate">基础字段</div>
-              <draggable
-                tag="ul"
-                :list="basicComponents"
-                :move="handleMove"
-                v-bind="{group:{ name:'people', pull:'clone',put:false},sort:false, ghostClass: 'ghost'}"
-                @end="handleMoveEnd"
-                @start="handleMoveStart"
-              >
-                <template v-for="(item, index) in basicComponents">
-                  <li
-                    v-if="basicFields.indexOf(item.type)>=0"
-                    :key="index"
-                    class="form-edit-widget-label"
-                  >
-                    <a>
-                      <!-- <i class="icon iconfont" :class="item.icon" /> -->
-                      <svg-icon class="icon" :icon-class="item.icon" />
-                      <span>{{ item.name }}</span>
-                    </a>
-                  </li>
-                </template>
-              </draggable>
-            </template>
-            <!-- 高级字段 -->
-            <template v-if="advanceFields.length">
-              <div class="widget-cate">高级字段</div>
-              <draggable
-                tag="ul"
-                :list="advanceComponents"
-                :move="handleMove"
-                v-bind="{group:{ name:'people', pull:'clone',put:false},sort:false, ghostClass: 'ghost'}"
-                @end="handleMoveEnd"
-                @start="handleMoveStart"
-              >
-                <template v-for="(item, index) in advanceComponents">
-                  <li
-                    v-if="advanceFields.indexOf(item.type) >= 0"
-                    :key="index"
-                    class="form-edit-widget-label"
-                  >
-                    <a>
-                      <svg-icon class="icon" :icon-class="item.icon" />
-                      <span>{{ item.name }}</span>
-                    </a>
-                  </li>
-                </template>
-              </draggable>
-            </template>
-            <!-- 布局字段 -->
-            <template v-if="layoutFields.length">
-              <div class="widget-cate">布局字段</div>
-              <draggable
-                tag="ul"
-                :move="handleMove"
-                :list="layoutComponents"
-                v-bind="{group:{ name:'people', pull:'clone',put:false},sort:false, ghostClass: 'ghost'}"
-                @end="handleMoveEnd"
-                @start="handleMoveStart"
-              >
-                <template v-for="(item, index) in layoutComponents">
-                  <li
-                    v-if="layoutFields.indexOf(item.type) >=0"
-                    :key="index"
-                    class="form-edit-widget-label"
-                  >
-                    <a>
-                      <svg-icon class="icon" :icon-class="item.icon" />
-                      <span>{{ item.name }}</span>
-                    </a>
-                  </li>
-                </template>
-              </draggable>
+            <template v-if="!model">
+              <!-- 基础字段 -->
+              <template v-if="basicFields.length">
+                <div class="widget-cate">基础字段</div>
+                <draggable
+                  tag="ul"
+                  :list="basicComponents"
+                  :move="handleMove"
+                  v-bind="{group:{ name:'people', pull:'clone',put:false},sort:false, ghostClass: 'ghost'}"
+                  @end="handleMoveEnd"
+                  @start="handleMoveStart"
+                >
+                  <template v-for="(item, index) in basicComponents">
+                    <li
+                      v-if="basicFields.indexOf(item.type)>=0"
+                      :key="index"
+                      class="form-edit-widget-label"
+                    >
+                      <a>
+                        <!-- <i class="icon iconfont" :class="item.icon" /> -->
+                        <svg-icon class="icon" :icon-class="item.icon" />
+                        <span>{{ item.name }}</span>
+                      </a>
+                    </li>
+                  </template>
+                </draggable>
+              </template>
+              <!-- 高级字段 -->
+              <template v-if="advanceFields.length">
+                <div class="widget-cate">高级字段</div>
+                <draggable
+                  tag="ul"
+                  :list="advanceComponents"
+                  :move="handleMove"
+                  v-bind="{group:{ name:'people', pull:'clone',put:false},sort:false, ghostClass: 'ghost'}"
+                  @end="handleMoveEnd"
+                  @start="handleMoveStart"
+                >
+                  <template v-for="(item, index) in advanceComponents">
+                    <li
+                      v-if="advanceFields.indexOf(item.type) >= 0"
+                      :key="index"
+                      class="form-edit-widget-label"
+                    >
+                      <a>
+                        <svg-icon class="icon" :icon-class="item.icon" />
+                        <span>{{ item.name }}</span>
+                      </a>
+                    </li>
+                  </template>
+                </draggable>
+              </template>
+              <!-- 布局字段 -->
+              <template v-if="layoutFields.length">
+                <div class="widget-cate">布局字段</div>
+                <draggable
+                  tag="ul"
+                  :move="handleMove"
+                  :list="layoutComponents"
+                  v-bind="{group:{ name:'people', pull:'clone',put:false},sort:false, ghostClass: 'ghost'}"
+                  @end="handleMoveEnd"
+                  @start="handleMoveStart"
+                >
+                  <template v-for="(item, index) in layoutComponents">
+                    <li
+                      v-if="layoutFields.indexOf(item.type) >=0"
+                      :key="index"
+                      class="form-edit-widget-label"
+                    >
+                      <a>
+                        <svg-icon class="icon" :icon-class="item.icon" />
+                        <span>{{ item.name }}</span>
+                      </a>
+                    </li>
+                  </template>
+                </draggable>
+              </template>
             </template>
             <!-- 自定义组件组 -->
             <template v-if="layoutFields.length">
@@ -110,7 +112,7 @@
         <el-container class="center-container" direction="vertical">
           <el-header class="btn-bar" style="height: 45px;">
             <slot name="action" />
-            <el-button v-if="save" type="text" size="medium" icon="el-icon-upload2" @click="getJSON">保存组件组</el-button>
+            <el-button v-if="save" type="text" size="medium" icon="el-icon-upload2" @click="getResult">保存组件组</el-button>
             <el-button v-if="upload" type="text" size="medium" icon="el-icon-download" @click="handleUpload">导入JSON</el-button>
             <el-button v-if="clearable" type="text" size="medium" icon="el-icon-delete" @click="handleClear">清空</el-button>
             <el-button v-if="preview" type="text" size="medium" icon="el-icon-view" @click="handlePreview">预览</el-button>
@@ -123,6 +125,7 @@
               ref="widgetForm"
               :data="widgetForm"
               :select.sync="widgetFormSelect"
+              :model="model"
             />
           </el-main>
         </el-container>
@@ -130,14 +133,16 @@
         <el-aside class="widget-config-container">
           <el-container>
             <el-header height="45px">
-              <div class="config-tab" :class="{active: configTab=='widget'}" @click="handleConfigSelect('widget')">字段属性</div>
+              <div v-if="!model" class="config-tab" :class="{active: configTab=='widget'}" @click="handleConfigSelect('widget')">字段属性</div>
               <div class="config-tab" :class="{active: configTab=='form'}" @click="handleConfigSelect('form')">表单属性</div>
             </el-header>
             <el-main>
               <el-scrollbar tag="div" style="height:100%" wrap-class="config-content">
                 <widget-config
+                  v-if="!model"
                   v-show="configTab=='widget'"
                   :data="widgetFormSelect"
+                  :keys="$attrs['keys']"
                 />
                 <form-config
                   v-show="configTab=='form'"
@@ -246,6 +251,7 @@ import CusDialog from './CusDialog'
 import GenerateForm from './GenerateForm'
 import Clipboard from 'clipboard'
 import { basicComponents, layoutComponents, advanceComponents } from './componentsConfig.js'
+// import { getCstomComponents } from '@/api/formMaking'
 import generateCode from './generateCode.js'
 
 export default {
@@ -283,6 +289,10 @@ export default {
       type: Boolean,
       default: false
     },
+    model: {
+      type: Boolean,
+      default: false
+    },
     basicFields: {
       type: Array,
       default: () => ['input', 'textarea', 'number', 'radio', 'checkbox', 'time', 'date', 'rate', 'color', 'select', 'switch', 'slider', 'text']
@@ -312,7 +322,7 @@ export default {
           size: 'small'
         }
       },
-      configTab: 'widget',
+      configTab: undefined,
       widgetFormSelect: null,
       previewVisible: false,
       jsonVisible: false,
@@ -338,10 +348,13 @@ export default {
     }
   },
   mounted() {
-    // this._loadComponents()
+    this.setDefaultConfigTab()
     // this.fetchCstomComponents()
   },
   methods: {
+    setDefaultConfigTab() {
+      this.configTab = this.model ? 'form' : 'widget'
+    },
     /* // 获取自定义组件组
     fetchCstomComponents() {
       getCstomComponents().then(res => {
@@ -442,7 +455,7 @@ export default {
 
       this.widgetFormSelect = {}
     },
-    getJSON() {
+    getResult() {
       if (!this.widgetForm.list.length) {
         return false
       }
@@ -450,9 +463,20 @@ export default {
       let list = widigetForm.list
       this.formatWidigetListValue(list)
       list = this.formatWidigetList(list)
-      const json = JSON.stringify(list[0])
-      console.log(json)
-      return json
+      const componentJson = JSON.stringify(list[0])
+      const formJson = JSON.stringify(widigetForm)
+      console.log(list)
+      const keys = list[0].list.map(item => {
+        return { name: item.name, code: item.model }
+      })
+      return { componentJson, keys, formJson }
+    },
+    getModelIdList() {
+      if (!this.widgetForm.list.length) {
+        return false
+      }
+      const idList = this.widgetForm.list.map(item => item.id)
+      return idList
     },
     getHtml() {
       return generateCode(JSON.stringify(this.widgetForm))
@@ -472,9 +496,8 @@ export default {
     formatWidigetListValue(list) {
       list.forEach((item) => {
         delete (item.key)
-        delete (item.model)
-        delete (item.options.remoteFunc)
-        console.log(item)
+        /* delete (item.model)
+        delete (item.options.remoteFunc) */
         if (item.type === 'custom') {
           this.formatWidigetListValue(item.list)
         }
@@ -507,10 +530,12 @@ export default {
     // 格式化请求到的自定义组件组 修改名称
     formatCustomComponents(list) {
       const hasJsonComponents = list.filter(item => item.formJson)
-      return hasJsonComponents.map(({ name, formJson }) => {
+      return hasJsonComponents.map(({ id, name, formJson }) => {
         const newNameStr = JSON.stringify({ name }).replace(/[{}]/g, '')
         const newJson = formJson.replace('"name":"自定义组件组"', newNameStr)
-        return JSON.parse(newJson)
+        const result = JSON.parse(newJson)
+        result.id = id
+        return result
       })
     }
   }

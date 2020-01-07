@@ -5,7 +5,21 @@
         v-if="data.type!='grid' && data.type!='custom' && data.type!='title'"
         label="字段标识"
       >
-        <el-input v-model="data.model" />
+        <el-select
+          v-model="data.model"
+          style="width:100%"
+          filterable
+          allow-create
+          default-first-option
+          placeholder="请选择或手动输入"
+        >
+          <el-option
+            v-for="item in keys"
+            :key="item"
+            :label="item"
+            :value="item"
+          />
+        </el-select>
       </el-form-item>
       <el-form-item v-if="data.type!='grid'" label="标题">
         <el-input v-model="data.name" />
@@ -433,8 +447,16 @@ export default {
   components: {
     Draggable
   },
-  // eslint-disable-next-line
-  props: ['data'],
+  props: {
+    data: {
+      type: Object,
+      default: undefined
+    },
+    keys: {
+      type: Array,
+      default: () => []
+    }
+  },
   data() {
     return {
       validator: {
@@ -592,7 +614,7 @@ export default {
       const options = data.options
       if (options.remote && options.remoteFunc) {
         request({
-          url: `/api/${options.remoteFunc}`,
+          url: `${options.remoteFunc}`,
           method: 'get'
         }).then(res => {
           const resData = res.data

@@ -243,7 +243,6 @@ export default {
     }
   },
   created() {
-    console.log(this)
     /**
      * 调用 api 获取数据
      */
@@ -270,17 +269,17 @@ export default {
       })
     } */
 
-    if (this.widget.type === 'imgupload' && this.widget.options.isQiniu) {
+    /* if (this.widget.type === 'imgupload' && this.widget.options.isQiniu) {
       this.remote[this.widget.options.tokenFunc]((data) => {
         this.widget.options.token = data
       })
-    }
+    } */
   },
   methods: {
     fetchOptions(params) {
       const options = this.widget.options
       request({
-        url: `/api/${options.remoteFunc}`,
+        url: `${options.remoteFunc}`,
         method: 'get',
         params
       }).then(res => {
@@ -296,7 +295,6 @@ export default {
       })
     },
     update(value) {
-      console.log('update', value)
       const key = this.widget.options.linkage.key
       const params = JSON.parse(`{
         "${key}": "${value}"
